@@ -1,21 +1,24 @@
-110000: "internal error"
+110000: "internal error" #
 120000: "internal error"
 130000: "internal error"
 131000: "internal error"
 132000: "internal error"
 135000: "internal error"
 136000: "internal error"
-140000: "AuthFailed"
-150000: "Timeout"
-170000: "ParamValidateFailed"
-171000: "HeadValidateFailed"
-200001: "UserNotFound"
-200002: "AmountInsufficient"
-200003: "Token Invalid"
-200004: "Token Expire"
-200005: "The account or password is incorrect"
-300001: "order not found"
-300002: "order has filled"
-300003: "market order can not cancel"
-300004: "not bids"
-300005: "no asks"
+#基础服务错误 (140000-171000)
+140000: "AuthFailed" # 认证失败 (AuthFailed)
+150000: "Timeout" # 超时 (Timeout)
+170000: "ParamValidateFailed" # 参数验证失败 (ParamValidateFailed)
+171000: "HeadValidateFailed" # 请求头验证失败 (HeadValidateFailed)
+#用户相关错误 (200001-200005)
+200001: "UserNotFound" # 用户未找到
+200002: "AmountInsufficient" # 余额不足
+200003: "Token Invalid" # Token 无效
+200004: "Token Expire" # Token 过期
+200005: "The account or password is incorrect" # 账号密码错误
+#订单相关错误 (300001-300005)
+300001: "order not found" # 订单未找到
+300002: "order has filled" # 订单已成交
+300003: "market order can not cancel" # 市价单不能取消
+300004: "not bids" # 无买单/卖单
+300005: "no asks" # 无买单/卖单

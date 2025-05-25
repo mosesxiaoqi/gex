@@ -1,5 +1,6 @@
 syntax = "v1"
-
+// `info` 块的内容不会直接生成到 Go 代码中，因为它是 API 的元信息，与具体的业务逻辑无关。
+// 生成 Swagger 文档时，`info` 块的内容会被嵌入到 Swagger 文档的 `info` 部分
 info(
 	title: "账户"
 	desc: "账户"
@@ -10,6 +11,7 @@ info(
 type Empty{}
 type (
 	GetCaptchaResp {
+	// 添加一个json标签，在进行结构体转json时可以将键转成符合json的小写
 		CaptchaPic    string `json:"captcha_pic"`
 		CaptchaId     string `json:"captcha_id"`
 		CaptchaLength int32  `json:"captch_length"`
@@ -67,7 +69,12 @@ type (
 		Qty      string `json:"qty"`
 	}
 )
+// `@server` 的作用**：- 定义服务的全局配置
 @server(
+    // 添加了一个路由前缀
+    // 比如post /get_captcha  returns (GetCaptchaResp)
+    // 实际的路由就是/account/v1/get_captcha
+    // go-zero会提供一个rest.WithPrefix("/account/v1"), // 全局前缀
 	prefix: /account/v1
 )
 

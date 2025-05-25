@@ -15,14 +15,29 @@ import (
 func InitConsumer(sc *svc.ServiceContext) {
 	go func() {
 		for {
+			// sc.MatchConsumer 是一个 pulsar.Consumer 实例
+			// Receive(ctx) 是 Pulsar Go SDK 中的方法，用来阻塞式地接收消息，直到收到或超时
 			message, err := sc.MatchConsumer.Receive(context.Background())
 			if err != nil {
 				logx.Errorw("consumer message match result failed", logger.ErrorField(err))
 				continue
 			}
+			//  m 是用来接收一条撮合响应消息的变量
 			var m matchMq.MatchResp
+			/*if err := ...; err != nil等同于-》 err := proto.Unmarshal(...)
+												if err != nil {
+																...
+												} */
+			// 使用 Protobuf 的反序列化函数
+			// proto.Unmarshal：来自 google.golang.org/protobuf/proto，是将 Protobuf 数据 → Go 对象
+			// message.Payload() 这个字节数组反序列化成 m 这个结构体
 			if err := proto.Unmarshal(message.Payload(), &m); err != nil {
 				logx.Errorw("unmarshal match result failed", logger.ErrorField(err))
+				// Ack(message)：告诉 Pulsar 这条消息我已经处理完了，不要再发给我了
+				// 如果不调用 Ack，这条消息可能会：
+				//	•	在超时后被认为消费失败；
+				//	•	被重新投递；
+				//	•	或进入死信队列。
 				if err := sc.MatchConsumer.Ack(message); err != nil {
 					logx.Errorw("consumer message failed", logger.ErrorField(err))
 				}

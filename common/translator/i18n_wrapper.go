@@ -19,13 +19,19 @@ const (
 
 var (
 	_defaultLang       = language.English
+	// 用于存储一个指向 `Translator` 类型的原子指针
+	// `atomic.Pointer` 是 Go 标准库 `sync/atomic` 包中的一种类型，
+	// 用于安全地操作指针，支持并发环境下的原子操作
 	_defaultTranslator = atomic.Pointer[Translator]{}
 )
 
 func SetDefaultTranslator(translator *Translator) {
+	// Store会存储新的指针，原来指针不使用会被go回收
 	_defaultTranslator.Store(translator)
 }
 
+// *i18n.Bundle 是将 i18n.Bundle 结构体的指针嵌入到 Translator 结构体中，
+// 允许 Translator 继承 i18n.Bundle 的字段和方法，并通过指针共享和修改其状态
 type Translator struct {
 	*i18n.Bundle
 	defaultMsgs map[string]string
